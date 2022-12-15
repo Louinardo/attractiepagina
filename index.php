@@ -22,10 +22,55 @@ require_once 'admin/backend/config.php';
     <?php require_once 'header.php'; ?>
     <div class="container content">
         <aside>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia modi dolore magnam! Iste libero voluptatum autem, sapiente ullam earum nostrum sed magnam vel laboriosam quibusdam, officia, esse vitae dignissimos nulla?
+            <div class="form-group">
+                <form action="" method="GET">
+                    <select name="themeland">
+                        <option value="familyland">FamilyLand</option>
+                        <option value="waterland">WaterLand</option>
+                        <option value="adventureland">AdventureLand</option>
+                    </select>
+                    <select name="lengte">
+                        <option value="-70">Kleiner dan 70</option>
+                        <option value="70">Groter dan 70</option>
+                        <option value="100">Groter dan 100</option>
+                        <option value="120">Groter dan 120</option>
+                        <option value="140"> Groter dan 140</option>
+                    </select>
+                    <select name="fastpass">
+                        <option value="fastpasson">Heeft een Fastpass</option>
+                        <option value="fastpassoff">Heeft geen Fastpass</option>
+                    </vselect>
+                    <div class="button">
+                        <input type="submit" value="Filter">
+                    </div>
+                </form>
+            </div>
         </aside>
         <main>
-            <!-- hier komen de attractiekaartjes -->
+            <?php 
+            require_once 'admin/backend/conn.php';
+            $query = "SELECT * FROM rides";
+            $statement = $conn->prepare($query);
+            $statement->execute();
+            $attracties = $statement->fetchAll(PDO::FETCH_ASSOC)
+             ?>
+            <?php foreach ($attracties as $attractie): ?>
+            <div class="kaart">
+                <img src="img/attracties/<?php echo $attractie['img_file']; ?>" alt="">
+                <p><?php echo strtoupper($attractie['themeland']); ?></p>
+                <h1><?php echo $attractie['title']; ?></h1>
+                <p><?php echo $attractie['description']; ?></p>
+                <?php if($attractie['min_length'] > 1)
+                {
+                    ?><p><?php echo $attractie['min_length']; ?>CM minimale lengte<?php
+                } ?>
+                <?php elif(min_length < 1)
+                {
+                    ?><p>Geen benodigde minimale lengte!</p><?php
+                } ?>
+
+            </div>
+            <?php endforeach; ?>
         </main>
     </div>
 
